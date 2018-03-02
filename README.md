@@ -13,10 +13,15 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
+To install this gem from www.rubygems.org (Warning, hasn't been updated)
 
     $ gem install fluent-plugin-docker-format
 
+To build this gem locally and install
+ 
+    $ bundle update
+    $ gem build fluent-plugin-docker-format.gemspec
+    $ gem install --local fluent-plugin-docker-format
 
 ## Usage
 
