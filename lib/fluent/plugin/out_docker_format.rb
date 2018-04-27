@@ -12,12 +12,10 @@ module Fluent
       @id_to_docker_cfg = {}
     end
 
-    def emit(tag, es, chain)
+    def process(tag, es)
       es.each do |time,record|
-        Engine.emit(interpolate_tag(tag), time, format_record(tag, record))
+        router.emit(interpolate_tag(tag), time, format_record(tag, record))
       end
-
-      chain.next
     end
 
     private
@@ -32,12 +30,12 @@ module Fluent
       id = interpolate(tag, @container_id)
 
       container_name = get_container_name(id)
-      @tag.gsub(/\$\{name\}/, container_name || id)
-      @tag.gsub(/\$\{container_name\}/, container_name || id)
+      new_tag = @tag.gsub(/\$\{name\}/, container_name || id)
+      new_tag = new_tag.gsub(/\$\{container_name\}/, container_name || id)
 
       image_name = get_image_name(id)
       image_name.gsub!(/\:.*$/,'') if image_name  # strip the docker tag
-      @tag.gsub(/\$\{image_name\}/, image_name || id)
+      new_tag.gsub(/\$\{image_name\}/, image_name || id)
     end
 
     def get_docker_cfg_from_id(id)
